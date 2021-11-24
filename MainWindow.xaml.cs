@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp1.Models;
 
 namespace DoclerWPF
 {
@@ -21,11 +22,17 @@ namespace DoclerWPF
   /// </summary>
   public partial class MainWindow : Window
   {
+    public Response Response { get; set; }
+
     public MainWindow()
     {
       InitializeComponent();
 
-      HttpCommunication.LoadDataAsync();
+    }
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+      Response = await HttpCommunication.LoadDataAsync();
     }
   }
 }

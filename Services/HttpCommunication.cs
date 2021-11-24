@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp1.Models;
 
 namespace DoclerWPF.Services
 {
@@ -16,7 +17,7 @@ namespace DoclerWPF.Services
     private static string path = "api/video-promotion/v1/list?psid=varhidibence&pstool=421_1&accessKey=19706d152c8486f9b435c7ae1bd05643&ms_notrack=1&program=revs&campaign_id=&type=&site=jasmin&sexualOrientation=straight&forcedPerformers=&limit=25&primaryColor=%238AC437&labelColor=%23212121&clientIp=10.111.111.84";
 
 
-    public static async Task LoadDataAsync()
+    public static async Task<Response> LoadDataAsync()
     {
       // https://pt.pctlwm.com/api/video-promotion/v1/list?psid=varhidibence&pstool=421_1&accessKey=19706d152c8486f9b435c7ae1bd05643&ms_notrack=1&program=revs&campaign_id=&type=&site=jasmin&sexualOrientation=straight&forcedPerformers=&limit=25&primaryColor=%238AC437&labelColor=%23212121&clientIp=10.111.111.84
       using (HttpClient client = new HttpClient())
@@ -28,15 +29,14 @@ namespace DoclerWPF.Services
 
         HttpResponseMessage response = await client.GetAsync(path);
 
-        if (response.IsSuccessStatusCode)
-        {
-          // product = await response.Content.ReadAsAsync<Product>();
+        string responseBody = await response.Content.ReadAsStringAsync();
 
-          string responseBody = await response.Content.ReadAsStringAsync();
+        Response responseContent = JsonConvert.DeserializeObject<Response>(responseBody);
 
-          Console.Write(responseBody);
+        return responseContent;
 
-        }
+
+        
       }
     }
 
