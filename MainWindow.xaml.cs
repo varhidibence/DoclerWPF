@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoclerWPF.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace DoclerWPF
     public MainWindow()
     {
       InitializeComponent();
+
+      HttpCommunication.LoadDataAsync();
     }
   }
 }
