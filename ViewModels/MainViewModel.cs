@@ -1,6 +1,7 @@
 ﻿using DoclerWPF.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace DoclerWPF.ViewModels
 
     public MainViewModel()
     {
-       
+      Content = new Response();
     }
 
     public async Task InitAsync()

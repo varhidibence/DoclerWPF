@@ -1,17 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfApp1.Models
 {
-  public class Response
+  public class Response : INotifyPropertyChanged
   {
-    public bool Success { get; set; }
+    private bool success;
+    private string status;
+    private Data data;
 
-    public string Status { get; set; }
+    public bool Success 
+    { 
+      get => success;
+      set
+      {
+        success = value;
+        OnPropertyChanged();
+      }
+    }
 
-    public Data Data { get; set; }
+    public string Status { get => status; set => status = value; }
+
+    public Data Data { get => data; set => data = value; }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string name = null)
+    {
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
   }
 }

@@ -30,6 +30,7 @@ namespace DoclerWPF
       InitializeComponent();
 
       MainViewModel = new MainViewModel();
+      this.DataContext = MainViewModel;
 
     }
 

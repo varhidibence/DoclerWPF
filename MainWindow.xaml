@@ -4,10 +4,32 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DoclerWPF"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
     <Grid>
-        
-    </Grid>
+
+    <StackPanel Orientation="Vertical">
+      <TextBlock Text="{Binding Content.Status}" FontSize="14" FontWeight="Bold"/>
+
+      <dxg:GridControl 
+        ItemsSource="{Binding Content.Data.videos}"
+        AutoPopulateColumns="True"
+        >
+        <dxg:GridControl.View>
+          <dxg:CardView/>
+        </dxg:GridControl.View>
+        <dxg:GridControl.Columns>
+          <dxg:GridColumn
+            Header="Title"
+            FieldName="title">
+          </dxg:GridColumn>
+        </dxg:GridControl.Columns>
+      </dxg:GridControl>
+
+
+    </StackPanel>
+
+  </Grid>
 </Window>
