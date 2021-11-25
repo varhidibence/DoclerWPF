@@ -1,4 +1,5 @@
 ﻿using DoclerWPF.Services;
+using DoclerWPF.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,17 +23,19 @@ namespace DoclerWPF
   /// </summary>
   public partial class MainWindow : Window
   {
-    public Response Response { get; set; }
+    public MainViewModel MainViewModel { get; set; }
 
     public MainWindow()
     {
       InitializeComponent();
 
+      MainViewModel = new MainViewModel();
+
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      Response = await HttpCommunication.LoadDataAsync();
+      await MainViewModel.InitAsync();
     }
   }
 }
