@@ -38,5 +38,21 @@ namespace DoclerWPF
 
       //await MainViewModel.InitAsync();
     }
+
+    private void GridControl_CustomUnboundColumnData(object sender, DevExpress.Xpf.Grid.GridColumnDataEventArgs e)
+    {
+      if (e.Column.FieldName == "PreviewImage" && e.IsGetData)
+      {
+        GridView view = sender as GridView;
+
+        System.Drawing.Image image = null;
+
+        Video a = MainViewModel.Content.Data.videos.ElementAtOrDefault(e.ListSourceRowIndex);
+
+        // e.Value = MainViewModel.GetImageFromURL(a.previewImages.ElementAtOrDefault(0)); // does not work
+        e.Value = MainViewModel.GetBitmapFromURL(a.previewImages.ElementAtOrDefault(0));
+
+      }
+    }
   }
 }

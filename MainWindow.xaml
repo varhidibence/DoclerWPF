@@ -4,32 +4,50 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DoclerWPF"
-        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Docler WPF App" Height="720" Width="1280"
         Loaded="Window_Loaded">
     <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="30"/>
+    </Grid.RowDefinitions>
 
-    <StackPanel Orientation="Vertical">
-      <TextBlock Text="{Binding Content.Status}" FontSize="14" FontWeight="Bold"/>
+    <dxlc:LayoutControl Orientation="Vertical" Grid.Row="0">
+      <dxlc:LayoutItem>
+        <TextBlock Text="{Binding Content.Status}" FontSize="14" FontWeight="Bold"/>
+      </dxlc:LayoutItem>
 
-      <dxg:GridControl 
+
+      <dxg:GridControl
         ItemsSource="{Binding Content.Data.videos}"
         AutoPopulateColumns="True"
-        >
+        CustomUnboundColumnData="GridControl_CustomUnboundColumnData">
         <dxg:GridControl.View>
-          <dxg:CardView/>
+          <dxg:CardView AllowEditing="False"/>
         </dxg:GridControl.View>
         <dxg:GridControl.Columns>
+          
           <dxg:GridColumn
             Header="Title"
             FieldName="title">
           </dxg:GridColumn>
+          <dxg:GridColumn 
+            FieldName="PreviewImage" 
+            UnboundType="Object">
+            <dxg:GridColumn.EditSettings>
+              <dxe:ImageEditSettings/>
+            </dxg:GridColumn.EditSettings>
+          </dxg:GridColumn>
+          
         </dxg:GridControl.Columns>
       </dxg:GridControl>
 
 
-    </StackPanel>
+    </dxlc:LayoutControl>
 
   </Grid>
 </Window>

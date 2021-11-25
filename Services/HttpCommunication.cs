@@ -7,6 +7,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.Models;
+using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace DoclerWPF.Services
 {
@@ -58,6 +60,38 @@ namespace DoclerWPF.Services
       }
     }
 
+    internal static Image GetImageFromURL(string profileImage)
+    {
+      System.Drawing.Image image = null;
+      string fullname = "https:" + profileImage;
+
+      try
+      {
+        System.Net.HttpWebRequest webRequest = System.Net.FileWebRequest.CreateHttp(fullname);
+        webRequest.AllowWriteStreamBuffering = true;
+        webRequest.Timeout = 30000;
+
+        System.Net.WebResponse webResponse = webRequest.GetResponse();
+
+        System.IO.Stream stream = webResponse.GetResponseStream();
+
+        image = System.Drawing.Image.FromStream(stream);
+
+        webResponse.Close();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.ToString());
+      }
+
+      return image;
+    }
+
+    internal static BitmapFrame GetImage(string resourceName)
+    {
+      Uri uri = new Uri("https:" + resourceName, UriKind.Absolute);
+      return BitmapFrame.Create(uri);
+    }
 
 
   }
