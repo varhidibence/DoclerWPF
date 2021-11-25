@@ -15,12 +15,13 @@ namespace DoclerWPF.ViewModels
 
     public MainViewModel()
     {
-      Content = new Response();
+      //Content = HttpCommunication.LoadDataAsync().Result;
+      Content = HttpCommunication.LoadData();
     }
 
     public async Task InitAsync()
     {
-      Content = await HttpCommunication.LoadDataAsync();
+      //Content = await HttpCommunication.LoadDataAsync();
     }
   }
 }

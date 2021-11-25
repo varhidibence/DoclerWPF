@@ -34,13 +34,31 @@ namespace DoclerWPF.Services
         Response responseContent = JsonConvert.DeserializeObject<Response>(responseBody);
 
         return responseContent;
-
-
         
+      }
+    }
+
+    public static Response LoadData()
+    {
+      using (HttpClient client = new HttpClient())
+      {
+        client.BaseAddress = new Uri(uri);
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = client.GetAsync(path).Result;
+
+        string responseBody = response.Content.ReadAsStringAsync().Result;
+
+        Response responseContent = JsonConvert.DeserializeObject<Response>(responseBody);
+
+        return responseContent;
+
       }
     }
 
 
 
-    }
+  }
   }

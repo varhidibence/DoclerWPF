@@ -29,14 +29,14 @@ namespace DoclerWPF
     {
       InitializeComponent();
 
-      MainViewModel = new MainViewModel();
-      this.DataContext = MainViewModel;
-
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-      await MainViewModel.InitAsync();
+      MainViewModel = new MainViewModel();
+      this.DataContext = MainViewModel;
+
+      //await MainViewModel.InitAsync();
     }
   }
 }
