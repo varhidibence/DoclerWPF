@@ -8,3 +8,7 @@ obj/Debug/DoclerWPF_MarkupCompile.i.cache
 obj/
 bin/
 
+obj/Debug/App.g.i.cs
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+obj/Debug/DoclerWPF_MarkupCompile.i.cache
+obj/Debug/MainWindow.g.i.cs

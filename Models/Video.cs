@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,5 +23,6 @@ namespace WpfApp1.Models
     public bool isHd { get; set; }
     public string uploader { get; set; }
     public string uploaderLink { get; set; }
+
   }
 }

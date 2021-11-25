@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using WpfApp1.Models;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using System.Collections.Specialized;
+using System.Web;
 
 namespace DoclerWPF.Services
 {
@@ -19,17 +21,21 @@ namespace DoclerWPF.Services
     private static string path = "api/video-promotion/v1/list?psid=varhidibence&pstool=421_1&accessKey=19706d152c8486f9b435c7ae1bd05643&ms_notrack=1&program=revs&campaign_id=&type=&site=jasmin&sexualOrientation=straight&forcedPerformers=&limit=25&primaryColor=%238AC437&labelColor=%23212121&clientIp=10.111.111.84";
 
 
-    public static async Task<Response> LoadDataAsync()
+    public static async Task<Response> LoadDataAsync(int pageIndex)
     {
-      // https://pt.pctlwm.com/api/video-promotion/v1/list?psid=varhidibence&pstool=421_1&accessKey=19706d152c8486f9b435c7ae1bd05643&ms_notrack=1&program=revs&campaign_id=&type=&site=jasmin&sexualOrientation=straight&forcedPerformers=&limit=25&primaryColor=%238AC437&labelColor=%23212121&clientIp=10.111.111.84
+      // https://pt.pctlwm.com/api/video-promotion/v1/list?
+      // psid=varhidibence&pstool=421_1&accessKey=19706d152c8486f9b435c7ae1bd05643&ms_notrack=1
+      // &program=revs&campaign_id=&type=&site=jasmin&sexualOrientation=straight
+      // &forcedPerformers=&limit=25&primaryColor=%238AC437&labelColor=%23212121&clientIp=10.111.111.84
       using (HttpClient client = new HttpClient())
       {
-        client.BaseAddress = new Uri(uri);
+        Uri uriWithPage = GetUriWithPageIndex(pageIndex);
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
 
-        HttpResponseMessage response = await client.GetAsync(path);
+        
+        HttpResponseMessage response = await client.GetAsync(uriWithPage);
 
         string responseBody = await response.Content.ReadAsStringAsync();
 
@@ -40,17 +46,27 @@ namespace DoclerWPF.Services
       }
     }
 
-    public static Response LoadData()
+    private static Uri GetUriWithPageIndex(int pageIndex)
+    {
+      UriBuilder uriBuilder = new UriBuilder(uri + path);
+
+      NameValueCollection queryParams = HttpUtility.ParseQueryString(uriBuilder.Query);
+      queryParams.Add("pageIndex", pageIndex.ToString());
+      uriBuilder.Query = queryParams.ToString();
+      return uriBuilder.Uri;
+    }
+
+    public static Response LoadData(int pageIndex)
     {
       using (HttpClient client = new HttpClient())
       {
-        client.BaseAddress = new Uri(uri);
+        Uri uriWithPage = GetUriWithPageIndex(pageIndex);
+
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
 
-        HttpResponseMessage response = client.GetAsync(path).Result;
-
+        HttpResponseMessage response = client.GetAsync(uriWithPage).Result;
         string responseBody = response.Content.ReadAsStringAsync().Result;
 
         Response responseContent = JsonConvert.DeserializeObject<Response>(responseBody);

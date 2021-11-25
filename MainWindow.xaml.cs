@@ -23,7 +23,7 @@ namespace DoclerWPF
   /// </summary>
   public partial class MainWindow : Window
   {
-    public MainViewModel MainViewModel { get; set; }
+    //public MainViewModel MainViewModel { get; set; }
 
     public MainWindow()
     {
@@ -31,10 +31,9 @@ namespace DoclerWPF
 
     }
 
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-      MainViewModel = new MainViewModel();
-      this.DataContext = MainViewModel;
+  private async void Window_Loaded(object sender, RoutedEventArgs e)
+  {
+     // MainViewModel = new MainViewModel();
 
       //await MainViewModel.InitAsync();
     }
@@ -44,15 +43,16 @@ namespace DoclerWPF
       if (e.Column.FieldName == "PreviewImage" && e.IsGetData)
       {
         GridView view = sender as GridView;
+        var mainViewModel = this.DataContext as MainViewModel;
 
         System.Drawing.Image image = null;
 
-        Video a = MainViewModel.Content.Data.videos.ElementAtOrDefault(e.ListSourceRowIndex);
+        Video a = mainViewModel.Content.Data.videos.ElementAtOrDefault(e.ListSourceRowIndex);
 
         // e.Value = MainViewModel.GetImageFromURL(a.previewImages.ElementAtOrDefault(0)); // does not work
-        e.Value = MainViewModel.GetBitmapFromURL(a.previewImages.ElementAtOrDefault(0));
+        e.Value = mainViewModel.GetBitmapFromURL(a.previewImages.ElementAtOrDefault(0));
 
-      }
+      } 
     }
   }
 }

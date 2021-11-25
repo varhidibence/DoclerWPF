@@ -24,9 +24,24 @@ namespace WpfApp1.Models
       }
     }
 
-    public string Status { get => status; set => status = value; }
+    public string Status { 
+      get => status; 
+      set { 
+        status = value;
+        OnPropertyChanged();
+      }
+    }
 
-    public Data Data { get => data; set => data = value; }
+    public Data Data 
+    { 
+      get => data;
+      set
+      {
+        data = value;
+        OnPropertyChanged();
+      }
+
+    }
 
     public event PropertyChangedEventHandler PropertyChanged;
 

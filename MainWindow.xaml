@@ -7,30 +7,39 @@
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+        xmlns:viewmodels="clr-namespace:DoclerWPF.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         Title="Docler WPF App" Height="720" Width="1280"
-        Loaded="Window_Loaded">
-    <Grid>
+        Loaded="Window_Loaded"
+        DataContext="{StaticResource MainViewModel}"
+        >
+ 
+  <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
-      <RowDefinition Height="30"/>
+      <RowDefinition Height="40"/>
     </Grid.RowDefinitions>
 
     <dxlc:LayoutControl Orientation="Vertical" Grid.Row="0">
-      <dxlc:LayoutItem>
-        <TextBlock Text="{Binding Content.Status}" FontSize="14" FontWeight="Bold"/>
+      <dxlc:LayoutItem Label="Success:">
+        <TextBlock Text="{Binding Content.Success}" FontSize="14" FontWeight="Bold"/>
       </dxlc:LayoutItem>
 
 
       <dxg:GridControl
+        x:Name="Cards"
         ItemsSource="{Binding Content.Data.videos}"
         AutoPopulateColumns="True"
         CustomUnboundColumnData="GridControl_CustomUnboundColumnData">
         <dxg:GridControl.View>
-          <dxg:CardView AllowEditing="False"/>
+          <dxg:CardView 
+            AllowEditing="False" 
+            CardLayout="Rows"/>
         </dxg:GridControl.View>
         <dxg:GridControl.Columns>
-          
+
           <dxg:GridColumn
             Header="Title"
             FieldName="title">
@@ -42,11 +51,42 @@
               <dxe:ImageEditSettings/>
             </dxg:GridColumn.EditSettings>
           </dxg:GridColumn>
-          
+          <dxg:GridColumn
+            Header="HD"
+            FieldName="isHd">
+            <dxg:GridColumn.EditSettings>
+              <dxe:CheckEditSettings/>
+            </dxg:GridColumn.EditSettings>
+          </dxg:GridColumn>
+          <dxg:GridColumn FieldName="Tags" x:Name="TagColumn">
+            <dxg:GridColumn.CellTemplate>
+              <DataTemplate>
+                <dxe:ListBoxEdit x:Name="Tags">
+                </dxe:ListBoxEdit>
+              </DataTemplate>
+            </dxg:GridColumn.CellTemplate>
+
+          </dxg:GridColumn>
         </dxg:GridControl.Columns>
       </dxg:GridControl>
+    </dxlc:LayoutControl>
 
-
+    <dxlc:LayoutControl 
+      HorizontalAlignment="Center" 
+      VerticalAlignment="Center" 
+      Grid.Row="1">
+      <dx:SimpleButton 
+        Height="20"
+        Content="Next"
+        Command="{Binding NextPageAsyncCommand}">
+      </dx:SimpleButton>
+      <dxlc:LayoutItem Label="Page:">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Text="{Binding Content.Data.pagination.currentPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBlock>/</TextBlock>
+          <TextBlock Text="{Binding Content.Data.pagination.totalPages}"/>
+        </StackPanel>
+      </dxlc:LayoutItem>
     </dxlc:LayoutControl>
 
   </Grid>
