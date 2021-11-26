@@ -30,9 +30,6 @@ namespace DoclerWPF.ViewModels
 
     public MainViewModel()
     {
-      //Content = HttpCommunication.LoadDataAsync().Result;
-      Content = HttpCommunication.LoadData(1);
-
       NextPageAsyncCommand = new AsyncCommand(LoadNextPageAsync);
     }
 
@@ -46,13 +43,13 @@ namespace DoclerWPF.ViewModels
     {
       if (Content?.Data?.pagination?.currentPage < Content?.Data?.pagination?.totalPages)
       {
-        Content = HttpCommunication.LoadData(Content?.Data?.pagination?.currentPage + 1 ?? 1);
+        Content = await HttpCommunication.LoadDataAsync(Content?.Data?.pagination?.currentPage + 1 ?? 1);
       }
     }
 
     public async Task InitAsync()
     {
-      // Content = await HttpCommunication.LoadDataAsync(1);
+      Content = await HttpCommunication.LoadDataAsync(1);
     }
 
 

@@ -13,7 +13,6 @@
         mc:Ignorable="d"
         Title="Docler WPF App" Height="720" Width="1280"
         Loaded="Window_Loaded"
-        DataContext="{StaticResource MainViewModel}"
         >
  
   <Grid>

@@ -23,19 +23,18 @@ namespace DoclerWPF
   /// </summary>
   public partial class MainWindow : Window
   {
-    //public MainViewModel MainViewModel { get; set; }
+    public MainViewModel MainViewModel { get; set; }
 
     public MainWindow()
     {
       InitializeComponent();
-
     }
 
   private async void Window_Loaded(object sender, RoutedEventArgs e)
   {
-     // MainViewModel = new MainViewModel();
-
-      //await MainViewModel.InitAsync();
+      MainViewModel = new MainViewModel();
+      this.DataContext = MainViewModel;
+      await MainViewModel.InitAsync();
     }
 
     private void GridControl_CustomUnboundColumnData(object sender, DevExpress.Xpf.Grid.GridColumnDataEventArgs e)

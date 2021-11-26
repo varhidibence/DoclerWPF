@@ -29,19 +29,27 @@ namespace DoclerWPF.Services
       // &forcedPerformers=&limit=25&primaryColor=%238AC437&labelColor=%23212121&clientIp=10.111.111.84
       using (HttpClient client = new HttpClient())
       {
-        Uri uriWithPage = GetUriWithPageIndex(pageIndex);
-        client.DefaultRequestHeaders.Accept.Clear();
-        client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
+        try
+        {
+          Uri uriWithPage = GetUriWithPageIndex(pageIndex);
+          client.DefaultRequestHeaders.Accept.Clear();
+          client.DefaultRequestHeaders.Accept.Add(
+              new MediaTypeWithQualityHeaderValue("application/json"));
 
-        
-        HttpResponseMessage response = await client.GetAsync(uriWithPage);
 
-        string responseBody = await response.Content.ReadAsStringAsync();
+          HttpResponseMessage response = await client.GetAsync(uriWithPage);
 
-        Response responseContent = JsonConvert.DeserializeObject<Response>(responseBody);
+          string responseBody = await response.Content.ReadAsStringAsync();
 
-        return responseContent;
+          Response responseContent = JsonConvert.DeserializeObject<Response>(responseBody);
+
+          return responseContent;
+        }
+        catch (Exception e)
+        {
+          Console.WriteLine(e.StackTrace);
+          return null;
+        }
         
       }
     }
@@ -60,18 +68,26 @@ namespace DoclerWPF.Services
     {
       using (HttpClient client = new HttpClient())
       {
-        Uri uriWithPage = GetUriWithPageIndex(pageIndex);
+        try
+        {
+          Uri uriWithPage = GetUriWithPageIndex(pageIndex);
 
-        client.DefaultRequestHeaders.Accept.Clear();
-        client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
+          client.DefaultRequestHeaders.Accept.Clear();
+          client.DefaultRequestHeaders.Accept.Add(
+              new MediaTypeWithQualityHeaderValue("application/json"));
 
-        HttpResponseMessage response = client.GetAsync(uriWithPage).Result;
-        string responseBody = response.Content.ReadAsStringAsync().Result;
+          HttpResponseMessage response = client.GetAsync(uriWithPage).Result;
+          string responseBody = response.Content.ReadAsStringAsync().Result;
 
-        Response responseContent = JsonConvert.DeserializeObject<Response>(responseBody);
+          Response responseContent = JsonConvert.DeserializeObject<Response>(responseBody);
 
-        return responseContent;
+          return responseContent;
+        }
+        catch (Exception e)
+        {
+          Console.WriteLine(e.StackTrace);
+          return null;
+        }
 
       }
     }
@@ -97,7 +113,7 @@ namespace DoclerWPF.Services
       }
       catch (Exception ex)
       {
-        Console.WriteLine(ex.ToString());
+        Console.WriteLine(ex.StackTrace);
       }
 
       return image;
@@ -105,8 +121,17 @@ namespace DoclerWPF.Services
 
     internal static BitmapFrame GetImage(string resourceName)
     {
-      Uri uri = new Uri("https:" + resourceName, UriKind.Absolute);
-      return BitmapFrame.Create(uri);
+      try
+      {
+        Uri uri = new Uri("https:" + resourceName, UriKind.Absolute);
+        return BitmapFrame.Create(uri);
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e.StackTrace);
+        return null;
+      }
+
     }
 
 
