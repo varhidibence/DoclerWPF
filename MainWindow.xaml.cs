@@ -1,4 +1,5 @@
-﻿using DoclerWPF.Services;
+﻿using DoclerWPF.Models;
+using DoclerWPF.Services;
 using DoclerWPF.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -37,21 +38,38 @@ namespace DoclerWPF
       await MainViewModel.InitAsync();
     }
 
+    /// <summary>
+    /// Takes out the url of the first preview image from each video on the view,
+    /// and trying to gets the image from web
+    /// and load to the view
+    /// </summary>
+    /// <param name="sender">the grid</param>
+    /// <param name="e"></param>
     private void GridControl_CustomUnboundColumnData(object sender, DevExpress.Xpf.Grid.GridColumnDataEventArgs e)
     {
       if (e.Column.FieldName == "PreviewImage" && e.IsGetData)
       {
-        GridView view = sender as GridView;
-        var mainViewModel = this.DataContext as MainViewModel;
-
-        System.Drawing.Image image = null;
-
-        Video a = mainViewModel.Content.Data.videos.ElementAtOrDefault(e.ListSourceRowIndex);
+        Video a = MainViewModel.Content.Data.videos.ElementAtOrDefault(e.ListSourceRowIndex);
 
         // e.Value = MainViewModel.GetImageFromURL(a.previewImages.ElementAtOrDefault(0)); // does not work
-        e.Value = mainViewModel.GetBitmapFromURL(a.previewImages.ElementAtOrDefault(0));
+        e.Value = MainViewModel.GetBitmapFromURL(a.previewImages.ElementAtOrDefault(0));
 
       } 
+    }
+
+    private void ComboBoxEdit_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
+    {
+      try
+      {
+       
+        Enum.TryParse<Quality>(e.NewValue.ToString(), out Quality quality);
+        MainViewModel.Quality = quality;
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.ToString() + ex.StackTrace);
+        
+      }
     }
   }
 }

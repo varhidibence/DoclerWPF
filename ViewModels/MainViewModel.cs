@@ -1,4 +1,5 @@
 ﻿using DevExpress.Mvvm;
+using DoclerWPF.Models;
 using DoclerWPF.Services;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,9 @@ using WpfApp1.Models;
 
 namespace DoclerWPF.ViewModels
 {
+  /// <summary>
+  /// Manage user interaction from view
+  /// </summary>
   public class MainViewModel : INotifyPropertyChanged
   {
     private Response content;
@@ -26,12 +30,45 @@ namespace DoclerWPF.ViewModels
       }
     }
 
+    private Quality quality;
+
+
+    public Quality Quality
+    {
+      get { return quality; }
+      set 
+      { 
+        quality = value;
+        RefreshPage();
+      }
+    }
+
+    private async Task RefreshPage()
+    {
+      Content = await HttpCommunication.LoadDataAsync(Content?.Data?.pagination?.currentPage ?? 1, Quality);
+    }
+
     public AsyncCommand NextPageAsyncCommand { get; set; }
+
+    public AsyncCommand PreviousPageAsyncCommand { get; set; }
 
     public MainViewModel()
     {
       NextPageAsyncCommand = new AsyncCommand(LoadNextPageAsync);
+      PreviousPageAsyncCommand = new AsyncCommand(LoadPreviousPageAsync);
+
+      Quality = Quality.all;
     }
+
+    /// <summary>
+    /// Gets <see cref="Content"/> with default values from web
+    /// </summary>
+    /// <returns></returns>
+    public async Task InitAsync()
+    {
+      Content = await HttpCommunication.LoadDataAsync(1, Quality);
+    }
+
 
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)
@@ -39,18 +76,24 @@ namespace DoclerWPF.ViewModels
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
+    #region Pagination
+    private async Task LoadPreviousPageAsync()
+    {
+      if (Content?.Data?.pagination?.currentPage >= 2)
+      {
+        Content = await HttpCommunication.LoadDataAsync(Content?.Data?.pagination?.currentPage - 1 ?? 1, Quality);
+      }
+    }
+
     private async Task LoadNextPageAsync()
     {
       if (Content?.Data?.pagination?.currentPage < Content?.Data?.pagination?.totalPages)
       {
-        Content = await HttpCommunication.LoadDataAsync(Content?.Data?.pagination?.currentPage + 1 ?? 1);
+        Content = await HttpCommunication.LoadDataAsync(Content?.Data?.pagination?.currentPage + 1 ?? 1, Quality);
       }
     }
 
-    public async Task InitAsync()
-    {
-      Content = await HttpCommunication.LoadDataAsync(1);
-    }
+    #endregion
 
 
     internal Image GetImageFromURL(string profileImage)
@@ -58,6 +101,11 @@ namespace DoclerWPF.ViewModels
       return HttpCommunication.GetImageFromURL(profileImage);
     }
 
+    /// <summary>
+    /// Gets the image from the defined url
+    /// </summary>
+    /// <param name="profileImage"></param>
+    /// <returns></returns>
     internal BitmapFrame GetBitmapFromURL(string profileImage)
     {
       return HttpCommunication.GetImage(profileImage);

@@ -106,6 +106,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\Data.cs" />
     <Compile Include="Models\Pagination.cs" />
+    <Compile Include="Models\Quality.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\Root.cs" />
     <Compile Include="Models\Video.cs" />

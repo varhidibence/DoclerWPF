@@ -8,11 +8,13 @@
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
-        xmlns:viewmodels="clr-namespace:DoclerWPF.ViewModels" 
+        xmlns:viewmodels="clr-namespace:DoclerWPF.ViewModels"
+        xmlns:models="clr-namespace:DoclerWPF.Models"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         Title="Docler WPF App" Height="720" Width="1280"
         Loaded="Window_Loaded"
+        Background="LemonChiffon"
         >
  
   <Grid>
@@ -22,12 +24,23 @@
     </Grid.RowDefinitions>
 
     <dxlc:LayoutControl Orientation="Vertical" Grid.Row="0">
-      <dxlc:LayoutItem Label="Success:">
-        <TextBlock Text="{Binding Content.Success}" FontSize="14" FontWeight="Bold"/>
-      </dxlc:LayoutItem>
+      <dxlc:LayoutGroup>
+        <dxlc:LayoutItem Label="Success:">
+          <TextBlock Text="{Binding Content.Success}" FontSize="14" FontWeight="Bold"/>
+        </dxlc:LayoutItem>
 
+        <dxlc:LayoutItem Label="Filter" HorizontalAlignment="Right" Width="100">
+          <dxe:ComboBoxEdit 
+            ItemsSource="{dxe:EnumItemsSource EnumType=models:Quality, UseNumericEnumValue=True}"
+            EditValueChanged="ComboBoxEdit_EditValueChanged">
+
+          </dxe:ComboBoxEdit>
+        </dxlc:LayoutItem>
+        
+      </dxlc:LayoutGroup>
 
       <dxg:GridControl
+        Background="LemonChiffon"
         x:Name="Cards"
         ItemsSource="{Binding Content.Data.videos}"
         AutoPopulateColumns="True"
@@ -41,15 +54,25 @@
 
           <dxg:GridColumn
             Header="Title"
-            FieldName="title">
+            FieldName="title"
+            Width="250">
           </dxg:GridColumn>
+          
           <dxg:GridColumn 
-            FieldName="PreviewImage" 
+            FieldName="PreviewImage"
+            Width="250"
             UnboundType="Object">
             <dxg:GridColumn.EditSettings>
               <dxe:ImageEditSettings/>
             </dxg:GridColumn.EditSettings>
           </dxg:GridColumn>
+
+          <dxg:GridColumn
+            Header="Uploader"
+            FieldName="uploader"
+            Width="250">
+          </dxg:GridColumn>
+
           <dxg:GridColumn
             Header="HD"
             FieldName="isHd">
@@ -57,6 +80,7 @@
               <dxe:CheckEditSettings/>
             </dxg:GridColumn.EditSettings>
           </dxg:GridColumn>
+          
           <dxg:GridColumn FieldName="Tags" x:Name="TagColumn">
             <dxg:GridColumn.CellTemplate>
               <DataTemplate>
@@ -70,23 +94,28 @@
       </dxg:GridControl>
     </dxlc:LayoutControl>
 
-    <dxlc:LayoutControl 
+    <dxlc:LayoutGroup 
       HorizontalAlignment="Center" 
       VerticalAlignment="Center" 
       Grid.Row="1">
       <dx:SimpleButton 
         Height="20"
-        Content="Next"
-        Command="{Binding NextPageAsyncCommand}">
+        Content="Prev"
+        Command="{Binding PreviousPageAsyncCommand}">
       </dx:SimpleButton>
       <dxlc:LayoutItem Label="Page:">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
           <TextBlock Text="{Binding Content.Data.pagination.currentPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
           <TextBlock>/</TextBlock>
           <TextBlock Text="{Binding Content.Data.pagination.totalPages}"/>
         </StackPanel>
       </dxlc:LayoutItem>
-    </dxlc:LayoutControl>
+      <dx:SimpleButton 
+        Height="20"
+        Content="Next"
+        Command="{Binding NextPageAsyncCommand}">
+      </dx:SimpleButton>
+    </dxlc:LayoutGroup>
 
   </Grid>
 </Window>
